@@ -9,7 +9,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{background:#fff;font-family:"Inter Tight",sans-serif;font-weight:500;color:#fff}
-body{cursor:none}
+body{cursor:none;touch-action:pan-y}
 a{color:inherit;text-decoration:none}
 #spacer{height:5702px}
 .stage{position:fixed;inset:0;overflow:hidden;background:#fff}
@@ -32,11 +32,12 @@ a{color:inherit;text-decoration:none}
 .wordmark{font-size:118px;letter-spacing:-.06em;line-height:.93}
 .mark{border:1.5px solid #fff;border-radius:50%;width:40px;height:40px;display:grid;place-items:center;font-size:18px;letter-spacing:-.04em;margin-top:6px}
 .caption{position:absolute;left:24px;top:150px;width:min(360px,80vw);font-size:12px;line-height:1.4;letter-spacing:-.04em}
-nav{position:absolute;right:24px;top:24px;display:flex;gap:40px;font-size:15px;align-items:center}
+nav{--nav-gap:28px;position:absolute;right:24px;top:24px;display:flex;gap:var(--nav-gap);font-size:15px;line-height:1;align-items:center}
+nav a{display:block;line-height:1;white-space:nowrap}
 nav .about{text-transform:uppercase}
 .menu{width:22px;display:flex;flex-direction:column;gap:6px}
 .menu i{display:block;height:1.5px;background:#fff}
-.right{display:flex;gap:24px;align-items:center}
+.right{display:flex;gap:var(--nav-gap);align-items:center}
 
 /* Outro */
 .info{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;opacity:0;pointer-events:none;text-align:center}
@@ -57,6 +58,7 @@ nav .about{text-transform:uppercase}
  .grid{grid-template-columns:repeat(2,1fr)}.card{grid-column:auto}
  .info .label{font-size:22px}.info .num{font-size:56px}.view{font-size:56px}
 }
+@media(hover:none){body{cursor:auto}.cur{display:none}}
 @media(prefers-reduced-motion:reduce){.card{transform:scale(1)!important}}
 </style>
 </head>
@@ -130,21 +132,13 @@ nav .about{text-transform:uppercase}
   }
   [o,c].forEach(function(v){v.muted=true;v.loop=false;v.playsInline=true;v.preload='auto';});
 
-  var narrow=innerWidth<1024||matchMedia('(hover: none), (pointer: coarse)').matches;
   var last=c;
   var scrub=function(){};
 
-  if(narrow){
-    /* 좁은 화면/터치: 두 영상이 번갈아 자동재생 */
-    show(o);
-    if(reduce){o.pause();c.pause();}
-    else{
-      o.addEventListener('ended',function(){show(c);c.currentTime=0;c.play().catch(function(){});});
-      c.addEventListener('ended',function(){show(o);o.currentTime=0;o.play().catch(function(){});});
-      c.pause();o.currentTime=0;o.play().catch(function(){});
-    }
+  if(reduce){
+    o.pause();c.pause();show(o);
   }else{
-    /* 데스크톱: 항상 정지, 마우스 x로 시간만 이동 */
+    /* 모든 기기 공통: 항상 정지, 마우스/손가락 x 위치로 시간만 이동 */
     o.pause();c.pause();o.currentTime=0;c.currentTime=0;show(c);
     scrub=function(){
       if(mx===null)return;
@@ -155,9 +149,9 @@ nav .about{text-transform:uppercase}
         return;
       }
       var v,a;
-      if(r<0){                                   // 마우스 왼쪽 -> 두 번째 파일
+      if(r<0){                                   // 왼쪽 -> 두 번째 파일
         v=c; var e=mid-dz; a=(e-mx)/e;
-      }else{                                     // 마우스 오른쪽 -> 첫 번째 파일
+      }else{                                     // 오른쪽 -> 첫 번째 파일
         v=o; var s2=mid+dz; a=(mx-s2)/(w-s2);
       }
       last=v; show(v);
@@ -167,6 +161,22 @@ nav .about{text-transform:uppercase}
       v.currentTime=a*d;
     };
   }
+
+  /* 모바일/태블릿: 첫 터치 때 영상 재생 잠금을 풀어줌 (iOS/Android 대응) */
+  var unlocked=false;
+  function unlock(){
+    if(unlocked)return; unlocked=true;
+    [o,c].forEach(function(v){
+      var p=v.play();
+      if(p&&p.then)p.then(function(){v.pause();}).catch(function(){});
+    });
+  }
+  function touchX(e){
+    var t=(e.touches&&e.touches[0])||(e.changedTouches&&e.changedTouches[0]);
+    if(t){mx=t.clientX;tx=t.clientX;ty=t.clientY;}
+  }
+  addEventListener('touchstart',function(e){unlock();touchX(e);},{passive:true});
+  addEventListener('touchmove',touchX,{passive:true});
 
   addEventListener('mousemove',function(e){mx=e.clientX;});
   addEventListener('pointermove',function(e){tx=e.clientX;ty=e.clientY;});
