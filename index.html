@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--gap:14px;--lead:75vh;--tail:14vh}
+:root{--gap:14px;--lead:60vh;--tail:14vh}
 html,body{background:#fff;font-family:"Inter Tight",sans-serif;font-weight:500;color:#fff}
 body{cursor:none;touch-action:pan-y}
 a{color:inherit;text-decoration:none}
@@ -28,7 +28,8 @@ a{color:inherit;text-decoration:none}
 .overlay{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
 
 /* Header */
-.logo,.caption,nav,.info,.view,.foot{mix-blend-mode:exclusion}
+.logo,.caption,nav{mix-blend-mode:exclusion}
+.info,.view,.foot{color:#000}
 .logo{position:absolute;left:24px;top:20px;display:flex;align-items:flex-start;gap:8px}
 .wordmark{font-size:118px;letter-spacing:-.06em;line-height:.93}
 .mark{border:1.5px solid #fff;border-radius:50%;width:40px;height:40px;display:grid;place-items:center;font-size:18px;letter-spacing:-.04em;margin-top:6px}
@@ -42,7 +43,7 @@ nav .about{text-transform:uppercase}
 
 /* Outro */
 .info{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;opacity:0;pointer-events:none;text-align:center}
-.info .circle{width:44px;height:44px;border:1.5px solid #fff;border-radius:50%;display:grid;place-items:center;font-size:15px;margin:0 auto 14px}
+.info .circle{width:44px;height:44px;border:1.5px solid currentColor;border-radius:50%;display:grid;place-items:center;font-size:15px;margin:0 auto 14px}
 .info .label{font-size:30px;letter-spacing:-.04em;line-height:1;text-transform:uppercase}
 .info .num{font-size:80px;letter-spacing:-.04em;line-height:1}
 .view{position:absolute;right:24px;bottom:56px;font-size:110px;letter-spacing:-.04em;line-height:1;transform:scale(0);transform-origin:100% 100%;pointer-events:none}
@@ -362,6 +363,8 @@ nav .about{text-transform:uppercase}
      SHR0   ~ SHR1  : 더 내리면 사진이 작아지며 사라짐
      SHR1   ~ 1     : 아웃트로
      (올릴 때는 이 순서의 반대로 같은 속도로 움직임) */
+  var logoEl=document.querySelector('.logo'),capEl=document.querySelector('.caption');
+  var heroEl=document.querySelector('.hero');
   var HOLD=.10,T_END=.70,SHR0=.80,SHR1=.88;
   /* 사진은 크기 변동 없이 지나가다가, 화면에 보이는 부분이 EDGE(=20%) 이하로 줄어들면
      (= 80% 지나가면) 작아지며 사라짐. 위/아래 어느 쪽 가장자리든, 내릴 때든 올릴 때든 동일 */
@@ -386,9 +389,12 @@ nav .about{text-transform:uppercase}
     });
 
     // 아웃트로
-    var o=seg(p,SHR1,.95);
-    ov.style.opacity=o*.7;
-    info.style.opacity=o;
+    heroEl.style.opacity=p>T_END?0:1;                       // 갤러리에 완전히 덮인 뒤엔 영상을 숨겨서, 끝에서 흰 배경이 나오게
+    ov.style.opacity=0;
+    gal.style.opacity=1-seg(p,SHR0+.02,SHR1+.02);           // 사진이 사라질 때쯤 검정 배경 여백도 서서히 투명해짐
+    var intro=1-seg(p,SHR0,SHR1);
+    logoEl.style.opacity=intro;capEl.style.opacity=intro;   // 로고/소개 문구도 같이 사라짐
+    info.style.opacity=seg(p,SHR1,.95);                     // 검정 글씨(2026 등)가 나타남
     view.style.transform='scale('+seg(p,.94,1)+')';
     view.style.pointerEvents=p>.97?'auto':'none';
     foot.style.opacity=seg(p,.96,1);
