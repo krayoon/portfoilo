@@ -19,7 +19,7 @@ a{color:inherit;text-decoration:none}
 #vR{visibility:hidden}
 
 /* Gallery */
-.gallery{position:absolute;left:0;top:0;width:100%;background:#000;padding-top:0;will-change:transform}
+.gallery{position:absolute;left:0;top:0;width:100%;background:#000;padding-top:0;padding-bottom:50vh;will-change:transform}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);align-items:end}
 .card{grid-column:var(--c);aspect-ratio:2/3;transform:scale(0);will-change:transform;overflow:hidden}
 .card img{width:100%;height:100%;object-fit:cover;display:block}
@@ -202,6 +202,8 @@ nav .about{text-transform:uppercase}
     if(innerWidth!==lastW){lastW=innerWidth;VH=ruler.offsetHeight||innerHeight;}  // 가로폭이 바뀔 때만(회전 등)
   });
 
+  var GROW=.45;   // 클수록 사진이 더 천천히 커짐 (예: .3 빠름 / .6 느림)
+
   function update(){
     var max=document.documentElement.scrollHeight-innerHeight;
     var p=max>0?scrollY/max:0, vh=VH;
@@ -214,8 +216,9 @@ nav .about{text-transform:uppercase}
 
     // 카드: 화면 하단에 들어오면 scale 0→1
     cards.forEach(function(c){
-      var top=y+c.offsetTop, h=c.offsetHeight;
-      var s=reduce?1:clamp((vh-top)/(h*.7),0,1);
+      var bottom=y+c.offsetTop+c.offsetHeight;          // 사진의 아래쪽 모서리 위치
+      var s=reduce?1:seg(vh-bottom,0,vh*GROW);          // 화면에 나타난 뒤 화면높이*GROW 만큼 스크롤하는 동안 커짐
+      s=s*s*(3-2*s);                                    // 부드러운 가속/감속
       c.style.transform='scale('+s+')';
     });
 
