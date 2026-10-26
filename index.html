@@ -8,11 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--gap:14px}
+:root{--gap:14px;--lead:75vh;--tail:14vh}
 html,body{background:#fff;font-family:"Inter Tight",sans-serif;font-weight:500;color:#fff}
 body{cursor:none;touch-action:pan-y}
 a{color:inherit;text-decoration:none}
-#spacer{height:5702px}
+#spacer{height:8000px}
 .stage{position:fixed;left:0;top:0;width:100%;height:100vh;height:100lvh;overflow:hidden;background:#fff}
 
 /* Hero video: 마우스 좌/우 위치로 전환 */
@@ -20,7 +20,7 @@ a{color:inherit;text-decoration:none}
 #vR{visibility:hidden}
 
 /* Gallery */
-.gallery{position:absolute;left:0;top:0;width:100%;background:#000;padding:var(--gap) var(--gap) 60vh;will-change:transform}
+.gallery{position:absolute;left:0;top:0;width:100%;background:#000;padding:var(--lead) var(--gap) var(--tail);will-change:transform}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);align-items:end}
 .card{grid-column:var(--c);aspect-ratio:2/3;transform:scale(0);will-change:transform;overflow:hidden}
 .card img{width:100%;height:100%;object-fit:cover;display:block}
@@ -85,6 +85,21 @@ nav .about{text-transform:uppercase}
 }
 @media(hover:none){.detail button,.detail a{cursor:pointer}}
 
+
+/* ABOUT 창 */
+.a-body{padding:56px 72px 96px}
+.a-intro{font-size:40px;line-height:1.28;letter-spacing:-.045em;max-width:1280px;margin-bottom:56px;white-space:pre-line}
+.a-grid{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1.5fr);gap:32px;align-items:start}
+.a-img img{width:100%;display:block;aspect-ratio:5/4;object-fit:cover;background:#eee}
+.a-secs{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-content:start}
+.a-secs section{border-top:1px solid #e6e6e6;padding:24px 0 48px}
+.a-secs h3{font-size:17px;font-weight:500;color:#777;letter-spacing:-.02em;margin-bottom:18px}
+.a-secs li{list-style:none;font-size:17px;line-height:1;letter-spacing:-.02em;padding-bottom:18px}
+@media(max-width:900px){
+ .a-body{padding:24px 16px 64px}.a-intro{font-size:26px;margin-bottom:32px}
+ .a-grid{grid-template-columns:1fr}.a-secs{gap:0 20px}
+}
+
 @media(max-width:1023.98px){.wordmark{font-size:80px}.view{font-size:72px}}
 @media(max-width:639.98px){
  :root{--hero:.92}
@@ -139,6 +154,13 @@ nav .about{text-transform:uppercase}
     <div class="d-imgs" id="dImgs"></div>
   </div>
 </div>
+<div class="detail" id="about" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="d-top">
+    <button class="name" data-close type="button">Rayoon</button>
+    <div class="d-right"><button class="pill" data-close type="button">Close ✕</button></div>
+  </div>
+  <div class="a-body" id="aBody"></div>
+</div>
 <div class="cur" id="cur">R</div>
 
 <script>
@@ -157,7 +179,7 @@ nav .about{text-transform:uppercase}
    ['image3',1203,2,'Berry parfait, food in motion'],
    ['image3',1203,1,'Portrait session at home']
   ];
-  var grid=document.getElementById('grid'),cards=[];
+  var grid=document.getElementById('grid'),cards=[],tgt=[],cs=[];
   P.forEach(function(p,i){
     var d=document.createElement('div');d.className='card';
     d.style.setProperty('--c',p[2]);d.dataset.col=p[2]-1;
@@ -182,7 +204,7 @@ nav .about{text-transform:uppercase}
     {},{},{},{},{},{},{},{},{}
   ];
   var det=document.getElementById('detail'),dInfo=document.getElementById('dInfo'),dImgs=document.getElementById('dImgs');
-  var openIdx=-1,opener=null;
+  var openIdx=-1,openEl=null,opener=null;
   function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
   function openDetail(i){
     var p=P[i],d=D[i]||{},title=d.title||p[3];
@@ -200,17 +222,46 @@ nav .about{text-transform:uppercase}
     opener=document.activeElement;
     det.classList.add('open');det.setAttribute('aria-hidden','false');
     document.documentElement.style.overflow='hidden';
-    openIdx=i;
+    openIdx=i;openEl=det;
     var cb=det.querySelector('[data-close]');if(cb)cb.focus({preventScroll:true});
   }
   function closeDetail(){
-    if(openIdx<0)return;
-    openIdx=-1;
-    det.classList.remove('open');det.setAttribute('aria-hidden','true');
+    if(!openEl)return;
+    openEl.classList.remove('open');openEl.setAttribute('aria-hidden','true');
+    openEl=null;openIdx=-1;
     document.documentElement.style.overflow='';
     if(opener&&opener.focus)opener.focus({preventScroll:true});
   }
-  Array.prototype.forEach.call(det.querySelectorAll('[data-close]'),function(b){b.addEventListener('click',closeDetail);});
+
+  /* ---- ABOUT 창 내용 (여기를 수정하세요) ----
+     image: images/ 폴더의 파일명(확장자 .png 제외). 비우면('') 이미지 칸이 비어요.
+     sections: 오른쪽 목록 (제목 + 항목들). 원하는 만큼 추가/삭제 가능 */
+  var A={
+    intro:'여기에 자기소개를 크게 적어주세요.\n예) 저는 현실적이고 날것의, 시간이 지나도 변하지 않는 순간을 담는 비주얼 스토리텔러입니다.',
+    image:'image1',
+    sections:[
+      {title:'Capabilities',     items:['Photography','Cinematography','Content Planning','Visual Direction']},
+      {title:'Selected Clients', items:['yido','Client 02','Client 03','Client 04']},
+      {title:'Recognition',      items:['수상/전시/매체 소개 1','수상/전시/매체 소개 2','수상/전시/매체 소개 3']}
+    ]
+  };
+  var aEl=document.getElementById('about'),aBody=document.getElementById('aBody');
+  function openAbout(){
+    aBody.innerHTML='<p class="a-intro">'+esc(A.intro)+'</p>'
+      +'<div class="a-grid"><div class="a-img">'+(A.image?'<img loading="lazy" src="'+B+A.image+'.png" alt="">':'')+'</div>'
+      +'<div class="a-secs">'+A.sections.map(function(sec){
+        return '<section><h3>'+esc(sec.title)+'</h3><ul>'+sec.items.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul></section>';
+      }).join('')+'</div></div>';
+    aEl.scrollTop=0;
+    opener=document.activeElement;
+    aEl.classList.add('open');aEl.setAttribute('aria-hidden','false');
+    document.documentElement.style.overflow='hidden';
+    openIdx=-2;openEl=aEl;
+    var cb=aEl.querySelector('[data-close]');if(cb)cb.focus({preventScroll:true});
+  }
+  var aboutLink=document.querySelector('nav .about');
+  if(aboutLink)aboutLink.addEventListener('click',function(e){e.preventDefault();openAbout();});
+  Array.prototype.forEach.call(document.querySelectorAll('.detail [data-close]'),function(b){b.addEventListener('click',closeDetail);});
   addEventListener('keydown',function(e){if(e.key==='Escape')closeDetail();});
 
   var $=function(i){return document.getElementById(i)};
@@ -237,7 +288,7 @@ nav .about{text-transform:uppercase}
     /* 모든 기기 공통: 항상 정지, 마우스/손가락 x 위치로 시간만 이동 */
     o.pause();c.pause();o.currentTime=0;c.currentTime=0;show(c);
     scrub=function(){
-      if(mx===null||openIdx>=0)return;
+      if(mx===null||openEl)return;
       var w=innerWidth,mid=w/2,dz=Math.max(30,w*.05),r=mx-mid;
       if(Math.abs(r)<=dz){                       // 데드존: 마지막 영상을 0초로
         if(!last.seeking&&last.currentTime!==0)last.currentTime=0;
@@ -284,6 +335,12 @@ nav .about{text-transform:uppercase}
   (function loop(){
     cx+=(tx-cx)*.18; cy+=(ty-cy)*.18;
     cur.style.transform='translate('+cx+'px,'+cy+'px)';
+    for(var k=0;k<cards.length;k++){                       // 사진 크기: 목표값을 향해 부드럽게 (위/아래 동일)
+      var t0=tgt[k]||0,c0=cs[k]||0;
+      c0=reduce?t0:c0+(t0-c0)*.22;
+      if(Math.abs(t0-c0)<.002)c0=t0;
+      if(c0!==cs[k]){cs[k]=c0;cards[k].style.transform='scale('+c0+')';}
+    }
     scrub();
     requestAnimationFrame(loop);
   })();
@@ -298,34 +355,43 @@ nav .about{text-transform:uppercase}
   });
 
   var mob=matchMedia('(max-width:639.98px)');
-  var GROW=.45;   // 클수록 사진이 더 천천히 커짐 (예: .3 빠름 / .6 느림)
+  /* ===== 스크롤 타임라인 (0 ~ 1) =====
+     0      ~ HOLD  : 첫 화면(영상) 멈춤
+     HOLD   ~ T_END : 검정 갤러리가 올라옴. 사진은 크기 변동 없이 지나가고, 가장자리에서 80% 지나면 작아지며 사라짐
+     T_END  ~ SHR0  : 멈춤 - 사진이 원래 크기로 그대로 보임
+     SHR0   ~ SHR1  : 더 내리면 사진이 작아지며 사라짐
+     SHR1   ~ 1     : 아웃트로
+     (올릴 때는 이 순서의 반대로 같은 속도로 움직임) */
+  var HOLD=.10,T_END=.70,SHR0=.80,SHR1=.88;
+  /* 사진은 크기 변동 없이 지나가다가, 화면에 보이는 부분이 EDGE(=20%) 이하로 줄어들면
+     (= 80% 지나가면) 작아지며 사라짐. 위/아래 어느 쪽 가장자리든, 내릴 때든 올릴 때든 동일 */
+  var EDGE=.2;
 
   function update(){
     var max=document.documentElement.scrollHeight-innerHeight;
     var p=max>0?scrollY/max:0, vh=VH;
     var H=gal.offsetHeight;
 
-    // 갤러리: 아래에서 올라와 위로 스크롤
-    var t=seg(p,.08,.85);
-    var y=vh-t*H;
+    // 갤러리 이동
+    var y=vh-seg(p,HOLD,T_END)*H;
     gal.style.transform='translateY('+y+'px)';
 
-    // 카드: 화면 하단에 들어오면 scale 0→1
+    // 사진 크기: (위치에 따라 커짐) x (멈춘 뒤 작아짐)
+    var shrink=1-seg(p,SHR0,SHR1);
     cards.forEach(function(c,k){
-      var bottom=y+c.offsetTop+c.offsetHeight;          // 사진의 아래쪽 모서리 위치
-      var col=mob.matches?(k%3):(+c.dataset.col||0);
-      var s=reduce?1:seg(vh-bottom-col*vh*.04,0,vh*GROW);          // 화면에 나타난 뒤 화면높이*GROW 만큼 스크롤하는 동안 커짐
-      s=s*s*(3-2*s);                                    // 부드러운 가속/감속
-      c.style.transform='scale('+s+')';
+      var top=y+c.offsetTop,h=c.offsetHeight;
+      var vis=(Math.min(top+h,vh)-Math.max(top,0))/h;      // 화면에 보이는 비율 (0~1)
+      var keep=reduce?1:seg(vis,0,EDGE);                   // 20% 넘게 보이면 1(원래 크기), 0%면 0
+      tgt[k]=keep*shrink;
     });
 
     // 아웃트로
-    var o=seg(p,.85,.95);
+    var o=seg(p,SHR1,.95);
     ov.style.opacity=o*.7;
     info.style.opacity=o;
-    view.style.transform='scale('+seg(p,.93,1)+')';
+    view.style.transform='scale('+seg(p,.94,1)+')';
     view.style.pointerEvents=p>.97?'auto':'none';
-    foot.style.opacity=seg(p,.95,1);
+    foot.style.opacity=seg(p,.96,1);
   }
   addEventListener('scroll',update,{passive:true});
   addEventListener('resize',update);
