@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+:root{--gap:14px}
 html,body{background:#fff;font-family:"Inter Tight",sans-serif;font-weight:500;color:#fff}
 body{cursor:none;touch-action:pan-y}
 a{color:inherit;text-decoration:none}
@@ -19,8 +20,8 @@ a{color:inherit;text-decoration:none}
 #vR{visibility:hidden}
 
 /* Gallery */
-.gallery{position:absolute;left:0;top:0;width:100%;background:#000;padding-top:0;padding-bottom:50vh;will-change:transform}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);align-items:end}
+.gallery{position:absolute;left:0;top:0;width:100%;background:#000;padding:var(--gap) var(--gap) 60vh;will-change:transform}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);align-items:end}
 .card{grid-column:var(--c);aspect-ratio:2/3;transform:scale(0);will-change:transform;overflow:hidden}
 .card img{width:100%;height:100%;object-fit:cover;display:block}
 
@@ -90,7 +91,8 @@ nav .about{text-transform:uppercase}
  body{cursor:auto}.cur{display:none}
  nav{--nav-gap:20px;left:auto;right:24px;top:18px;justify-content:flex-end}
  .logo{top:54px}.wordmark{font-size:56px}.caption{top:128px}
- .grid{grid-template-columns:repeat(2,1fr)}.card{grid-column:auto}
+ :root{--gap:8px}
+ .grid{grid-template-columns:repeat(3,1fr)}.card{grid-column:auto}
  .info .label{font-size:22px}.info .num{font-size:56px}.view{font-size:56px}
 }
 @media(hover:none){body{cursor:auto}.cur{display:none}}
@@ -158,7 +160,7 @@ nav .about{text-transform:uppercase}
   var grid=document.getElementById('grid'),cards=[];
   P.forEach(function(p,i){
     var d=document.createElement('div');d.className='card';
-    d.style.setProperty('--c',p[2]);
+    d.style.setProperty('--c',p[2]);d.dataset.col=p[2]-1;
     d.style.transformOrigin=(p[2]>=3?'right':'left')+' bottom';
     d.innerHTML='<img loading="lazy" width="'+p[1]+'" height="1800" src="'+B+p[0]+'.png?width='+p[1]+'&height=1800" alt="'+p[3]+'">';
     d.tabIndex=0;d.setAttribute('role','button');d.setAttribute('aria-label',p[3]);
@@ -295,6 +297,7 @@ nav .about{text-transform:uppercase}
     if(innerWidth!==lastW){lastW=innerWidth;VH=ruler.offsetHeight||innerHeight;}  // 가로폭이 바뀔 때만(회전 등)
   });
 
+  var mob=matchMedia('(max-width:639.98px)');
   var GROW=.45;   // 클수록 사진이 더 천천히 커짐 (예: .3 빠름 / .6 느림)
 
   function update(){
@@ -308,9 +311,10 @@ nav .about{text-transform:uppercase}
     gal.style.transform='translateY('+y+'px)';
 
     // 카드: 화면 하단에 들어오면 scale 0→1
-    cards.forEach(function(c){
+    cards.forEach(function(c,k){
       var bottom=y+c.offsetTop+c.offsetHeight;          // 사진의 아래쪽 모서리 위치
-      var s=reduce?1:seg(vh-bottom,0,vh*GROW);          // 화면에 나타난 뒤 화면높이*GROW 만큼 스크롤하는 동안 커짐
+      var col=mob.matches?(k%3):(+c.dataset.col||0);
+      var s=reduce?1:seg(vh-bottom-col*vh*.04,0,vh*GROW);          // 화면에 나타난 뒤 화면높이*GROW 만큼 스크롤하는 동안 커짐
       s=s*s*(3-2*s);                                    // 부드러운 가속/감속
       c.style.transform='scale('+s+')';
     });
