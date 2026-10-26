@@ -171,14 +171,14 @@ nav .about{text-transform:uppercase}
   var P=[
    ['image1',1200,4,'yido 율 디저트볼'],
    ['image2',1200,1,'yido 달항아리'],
-   ['image3',1161,3,'yido 달항아리'],
-   ['image4',1200,4,'yido 윤슬 면기'],
-   ['image5',1203,2,'한복린'],
+   ['image3',1161,3,'yido 윤슬 면기'],
+   ['image4',1200,4,''],
+   ['image5',1203,2,'rabbit hat girl'],
    ['image6',1200,1,'check pattern magazine girl'],
    ['image7',1200,3,'dark fantasy romace'],
-   ['image8',1350,4,'랑콤 립 이돌 커들 블러'],
-   ['image3',1203,2,'Berry parfait, food in motion'],
-   ['image3',1203,1,'Portrait session at home']
+   ['image8',1350,4,'한복린'],
+   ['image6',1203,2,'Berry parfait, food in motion'],
+   ['image7',1203,1,'Portrait session at home']
   ];
   var grid=document.getElementById('grid'),cards=[],tgt=[],cs=[];
   P.forEach(function(p,i){
@@ -198,11 +198,64 @@ nav .about{text-transform:uppercase}
      imgs: 오른쪽에 보여줄 이미지 파일명(확장자 제외, images/ 폴더) — 여러 장 가능 */
   var D=[
     {title:'yido 율 디저트볼',
-     tag:'한 줄 소개를 여기에 적어주세요.',
+     tag:'이도 도자기 율 디저트볼',
      desc:'작업 설명을 여기에 적어주세요.\n줄바꿈도 가능해요.',
      year:'2026', time:'2 weeks', tools:'Midjourney, Photoshop', cat:'Product',
-     imgs:['image1']},
-    {},{},{},{},{},{},{},{},{}
+     imgs:['image1','image1-2']},
+    {// 2번: 두 번째 사진 (image2)
+    title:'yido 달항아리',
+    tag:'달항아리 한 줄 소개',
+    desc:'달항아리 작업 설명',
+    year:'2026', time:'3 hours', tools:'Midjourney, Photoshop', cat:'Product',
+    imgs:['image2','image2-2']},
+    {// 3번: 두 번째 사진 (image3)
+    title:'yido 달항아리',
+    tag:'달항아리 한 줄 소개',
+    desc:'달항아리 작업 설명',
+    year:'2026', time:'1 week', tools:'Midjourney, Photoshop', cat:'Product',
+    imgs:['image2','image2-detail1']},
+    {// 4번: 네 번째 사진 (image4)
+    title:'마스크팩',
+    tag:'마스크팩 한 줄 소개',
+    desc:'달항아리 작업 설명',
+    year:'2026', time:'1 week', tools:'Midjourney, Photoshop', cat:'Product',
+    imgs:['image4','image4-2','image4-3','image4-4']},
+    {// 5번: 다섯 번째 사진 (image5)
+    title:'rabbit hat girl',
+    tag:'아동 의류 컨셉 화보',
+    desc:'밝고 순수한 느낌을 살려',
+    year:'2026', time:'1 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    imgs:['image5','image5-2','image5-3','image5-4']},
+    {// 5번: 다섯 번째 사진 (image6)
+    title:'rabbit hat girl',
+    tag:'아동 의류 컨셉 화보',
+    desc:'밝고 순수한 느낌을 살려',
+    year:'2026', time:'1 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    imgs:['image5','image5-1']},
+    {// 5번: 다섯 번째 사진 (image7)
+    title:'rabbit hat girl',
+    tag:'아동 의류 컨셉 화보',
+    desc:'밝고 순수한 느낌을 살려',
+    year:'2026', time:'1 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    imgs:['image5','image5-1']},
+    {// 5번: 다섯 번째 사진 (image8)
+    title:'rabbit hat girl',
+    tag:'아동 의류 컨셉 화보',
+    desc:'밝고 순수한 느낌을 살려',
+    year:'2026', time:'3 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    imgs:['image8','image8-2','image8-3']},
+    {// 8번: 다섯 번째 사진 (image8)
+    title:'hanbok lyn',
+    tag:'아동 의류 컨셉 화보',
+    desc:'밝고 순수한 느낌을 살려',
+    year:'2026', time:'3 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    imgs:['image8','image8-2','image8-2']},
+    {// 9번: 다섯 번째 사진 (image5)
+    title:'rabbit hat girl',
+    tag:'아동 의류 컨셉 화보',
+    desc:'밝고 순수한 느낌을 살려',
+    year:'2026', time:'1 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    imgs:['image5','image5-1']}
   ];
   var det=document.getElementById('detail'),dInfo=document.getElementById('dInfo'),dImgs=document.getElementById('dImgs');
   var openIdx=-1,openEl=null,opener=null;
