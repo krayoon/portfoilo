@@ -78,6 +78,7 @@ nav .about{text-transform:uppercase}
 .meta dd{font-size:17px}
 .d-imgs{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
 .d-imgs img{width:100%;height:auto;display:block;background:#eee}
+.d-imgs .d-video{grid-column:1/-1;width:100%;height:auto;display:block;background:#000}
 @media(max-width:900px){
  .detail button,.detail a{cursor:pointer}
  .d-body{grid-template-columns:1fr;gap:32px;padding:24px 16px 64px}
@@ -108,7 +109,7 @@ nav .about{text-transform:uppercase}
  nav{--nav-gap:20px;left:auto;right:24px;top:18px;justify-content:flex-end}
  .logo{top:54px}.wordmark{font-size:56px}.caption{top:128px}
  :root{--gap:8px}
- .grid{grid-template-columns:repeat(3,1fr)}.card{grid-column:auto}
+ .grid{grid-template-columns:repeat(3,1fr);row-gap:calc(var(--gap)*2)}.card{grid-column:var(--mc);grid-row:var(--mr)}
  .info .label{font-size:22px}.info .num{font-size:56px}.view{font-size:56px}
 }
 @media(hover:none){body{cursor:auto}.cur{display:none}}
@@ -180,17 +181,29 @@ nav .about{text-transform:uppercase}
    ['image6',1203,2,'Berry parfait, food in motion'],
    ['image7',1203,1,'Portrait session at home']
   ];
+  /* 모바일(3열) 배치: [열, 줄] — 빈 칸을 띄우며 지그재그로 배치
+     1줄: 1 _ 2 / 2줄: _ _ 3 / 3줄: _ 4 _ / 4줄: 5 _ 6 / 5줄: 7 _ _ / 6줄: _ 8 _ / 7줄: 9 _ 10 */
+  var M=[[1,1],[3,1],[3,2],[2,3],[1,4],[3,4],[1,5],[2,6],[1,7],[3,7]];
+  var mobMQ=matchMedia('(max-width:639.98px)');
   var grid=document.getElementById('grid'),cards=[],tgt=[],cs=[];
+  function setOrigins(){
+    cards.forEach(function(d,i){
+      var col=mobMQ.matches?M[i][0]:P[i][2];
+      d.style.transformOrigin=(col>=3?'right':(col===2&&mobMQ.matches?'center':'left'))+' bottom';
+    });
+  }
   P.forEach(function(p,i){
     var d=document.createElement('div');d.className='card';
     d.style.setProperty('--c',p[2]);d.dataset.col=p[2]-1;
-    d.style.transformOrigin=(p[2]>=3?'right':'left')+' bottom';
+    d.style.setProperty('--mc',M[i][0]);d.style.setProperty('--mr',M[i][1]);
     d.innerHTML='<img loading="lazy" width="'+p[1]+'" height="1800" src="'+B+p[0]+'.png?width='+p[1]+'&height=1800" alt="'+p[3]+'">';
     d.tabIndex=0;d.setAttribute('role','button');d.setAttribute('aria-label',p[3]);
     d.addEventListener('click',function(){openDetail(i);});
     d.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openDetail(i);}});
     grid.appendChild(d);cards.push(d);
   });
+  setOrigins();
+  if(mobMQ.addEventListener)mobMQ.addEventListener('change',setOrigins);
 
 
   /* ---- 상세 창 ----
@@ -217,44 +230,44 @@ nav .about{text-transform:uppercase}
     {// 4번: 네 번째 사진 (image4)
     title:'마스크팩',
     tag:'마스크팩 한 줄 소개',
-    desc:'달항아리 작업 설명',
-    year:'2026', time:'1 week', tools:'Midjourney, Photoshop', cat:'Product',
-    imgs:['image4','image4-2','image4-3','image4-4']},
+    desc:'마스크팩 작업 설명',
+    year:'2026', time:'6 hours', tools:'ChatGPT, Photoshop', cat:'Product',
+    imgs:['image4','image4-2','image4-3','image4-4','hydr-lab.mp4','hydr-lab2.mp4']},
     {// 5번: 다섯 번째 사진 (image5)
     title:'rabbit hat girl',
     tag:'아동 의류 컨셉 화보',
     desc:'밝고 순수한 느낌을 살려',
-    year:'2026', time:'1 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    year:'2026', time:'1 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
     imgs:['image5','image5-2','image5-3','image5-4']},
     {// 5번: 다섯 번째 사진 (image6)
     title:'rabbit hat girl',
     tag:'아동 의류 컨셉 화보',
     desc:'밝고 순수한 느낌을 살려',
-    year:'2026', time:'1 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    year:'2026', time:'1 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
     imgs:['image5','image5-1']},
     {// 5번: 다섯 번째 사진 (image7)
     title:'rabbit hat girl',
     tag:'아동 의류 컨셉 화보',
     desc:'밝고 순수한 느낌을 살려',
-    year:'2026', time:'1 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    year:'2026', time:'1 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
     imgs:['image5','image5-1']},
     {// 5번: 다섯 번째 사진 (image8)
     title:'rabbit hat girl',
     tag:'아동 의류 컨셉 화보',
     desc:'밝고 순수한 느낌을 살려',
-    year:'2026', time:'3 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    year:'2026', time:'3 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
     imgs:['image8','image8-2','image8-3']},
     {// 8번: 다섯 번째 사진 (image8)
     title:'hanbok lyn',
     tag:'아동 의류 컨셉 화보',
     desc:'밝고 순수한 느낌을 살려',
-    year:'2026', time:'3 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    year:'2026', time:'3 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
     imgs:['image8','image8-2','image8-2']},
     {// 9번: 다섯 번째 사진 (image5)
     title:'rabbit hat girl',
     tag:'아동 의류 컨셉 화보',
     desc:'밝고 순수한 느낌을 살려',
-    year:'2026', time:'1 day', tools:'Chat GPT, Photoshop', cat:'ART DIRECTION',
+    year:'2026', time:'1 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
     imgs:['image5','image5-1']}
   ];
   var det=document.getElementById('detail'),dInfo=document.getElementById('dInfo'),dImgs=document.getElementById('dImgs');
@@ -271,7 +284,12 @@ nav .about{text-transform:uppercase}
       +'<div><dt>Timeframe</dt><dd>'+esc(d.time||'—')+'</dd></div>'
       +'<div><dt>Tools</dt><dd>'+esc(d.tools||'—')+'</dd></div>'
       +'<div><dt>Category</dt><dd>'+esc(d.cat||'—')+'</dd></div></dl>';
-    dImgs.innerHTML=imgs.map(function(f){return '<img loading="lazy" src="'+B+f+'.png" alt="'+esc(title)+'">';}).join('');
+    dImgs.innerHTML=imgs.map(function(f){
+      if(/\.(mp4|webm|mov|m4v)$/i.test(f)){          // 영상: 확장자까지 적으면 videos/ 폴더에서 불러옴
+        return '<video class="d-video" src="videos/'+esc(f)+'" controls playsinline preload="metadata"></video>';
+      }
+      return '<img loading="lazy" src="'+B+f+'.png" alt="'+esc(title)+'">';
+    }).join('');
     det.scrollTop=0;
     opener=document.activeElement;
     det.classList.add('open');det.setAttribute('aria-hidden','false');
@@ -281,6 +299,7 @@ nav .about{text-transform:uppercase}
   }
   function closeDetail(){
     if(!openEl)return;
+    Array.prototype.forEach.call(openEl.querySelectorAll('video'),function(v){v.pause();});   // 닫을 때 영상 정지
     openEl.classList.remove('open');openEl.setAttribute('aria-hidden','true');
     openEl=null;openIdx=-1;
     document.documentElement.style.overflow='';
