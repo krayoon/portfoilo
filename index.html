@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--gap:14px;--lead:60vh;--tail:14vh}
+:root{--gap:14px;--pad:24vh;--lead:var(--pad);--tail:var(--pad)}
 html,body{background:#fff;font-family:"Inter Tight",sans-serif;font-weight:500;color:#fff}
 body{cursor:none;touch-action:pan-y}
 a{color:inherit;text-decoration:none}
@@ -76,14 +76,15 @@ nav .about{text-transform:uppercase}
 .meta{display:grid;grid-template-columns:1fr 1fr;gap:30px 24px;max-width:520px}
 .meta dt{color:#777;font-size:17px;margin-bottom:10px}
 .meta dd{font-size:17px}
-.d-imgs{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
-.d-imgs img{width:100%;height:auto;display:block;background:#eee}
-.d-imgs .d-video{grid-column:1/-1;width:100%;height:auto;display:block;background:#000}
+.d-imgs{display:grid;grid-template-columns:repeat(2,minmax(0,650px));gap:16px;align-items:start}
+.d-imgs img,.d-imgs .d-video{width:100%;aspect-ratio:650/810;object-fit:cover;display:block;background:#eee}
+.d-imgs .d-video{background:#000}
+.d-foot{text-align:center;color:#4c4c4c;font-size:13px;letter-spacing:-.02em;padding:0 16px 32px}
 @media(max-width:900px){
  .detail button,.detail a{cursor:pointer}
  .d-body{grid-template-columns:1fr;gap:32px;padding:24px 16px 64px}
  .d-info{position:static}.d-info h2{font-size:34px}.d-info .tag{font-size:19px}
- .d-imgs{grid-template-columns:1fr}
+ .d-imgs{grid-template-columns:minmax(0,650px)}
 }
 @media(hover:none){.detail button,.detail a{cursor:pointer}}
 
@@ -155,6 +156,7 @@ nav .about{text-transform:uppercase}
     <div class="d-info" id="dInfo"></div>
     <div class="d-imgs" id="dImgs"></div>
   </div>
+  <div class="d-foot">©2026 Kim Rayoon</div>
 </div>
 <div class="detail" id="about" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="d-top">
@@ -228,11 +230,11 @@ nav .about{text-transform:uppercase}
     year:'2026', time:'1 week', tools:'Midjourney, Photoshop', cat:'Product',
     imgs:['image2','image2-detail1']},
     {// 4번: 네 번째 사진 (image4)
-    title:'마스크팩',
-    tag:'마스크팩 한 줄 소개',
+    title:'HYDR LAB Skin Care Brand',
+    tag:'HYDR LAB Hydrogel Mask',
     desc:'마스크팩 작업 설명',
     year:'2026', time:'6 hours', tools:'ChatGPT, Photoshop', cat:'Product',
-    imgs:['image4','image4-2','image4-3','image4-4','hydr-lab.mp4','hydr-lab2.mp4']},
+    imgs:['image4','image4-1','image4-2','image4-3','image4-4','hydr-lab.mp4','hydr-lab1.mp4','hydr-lab2.mp4']},
     {// 5번: 다섯 번째 사진 (image5)
     title:'rabbit hat girl',
     tag:'아동 의류 컨셉 화보',
@@ -310,7 +312,7 @@ nav .about{text-transform:uppercase}
      image: images/ 폴더의 파일명(확장자 .png 제외). 비우면('') 이미지 칸이 비어요.
      sections: 오른쪽 목록 (제목 + 항목들). 원하는 만큼 추가/삭제 가능 */
   var A={
-    intro:'여기에 자기소개를 크게 적어주세요.\n예) 저는 현실적이고 날것의, 시간이 지나도 변하지 않는 순간을 담는 비주얼 스토리텔러입니다.',
+    intro:'직관적으로 느낄 수 있는 시각적 언어로 재해석하고,\n 시간이 지나도 변하지 않는 순간을 담는 비주얼 스토리텔러입니다.',
     image:'image1',
     sections:[
       {title:'Capabilities',     items:['Photography','Cinematography','Content Planning','Visual Direction']},
@@ -406,7 +408,7 @@ nav .about{text-transform:uppercase}
 
   /* 커스텀 커서 + 스크럽 루프 */
   (function loop(){
-    cx+=(tx-cx)*.18; cy+=(ty-cy)*.18;
+    cx+=(tx-cx)*.35; cy+=(ty-cy)*.35;
     cur.style.transform='translate('+cx+'px,'+cy+'px)';
     for(var k=0;k<cards.length;k++){                       // 사진 크기: 목표값을 향해 부드럽게 (위/아래 동일)
       var t0=tgt[k]||0,c0=cs[k]||0;
