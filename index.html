@@ -10,9 +10,9 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--gap:14px;--pad:24vh;--lead:var(--pad);--tail:var(--pad)}
 html,body{background:#fff;font-family:"Inter Tight",sans-serif;font-weight:500;color:#fff}
-body{cursor:none;touch-action:pan-y}
+body{touch-action:pan-y}
 a{color:inherit;text-decoration:none}
-#spacer{height:8000px}
+#spacer{height:10400px}
 .stage{position:fixed;left:0;top:0;width:100%;height:100vh;height:100lvh;overflow:hidden;background:#fff}
 
 /* Hero video: 마우스 좌/우 위치로 전환 */
@@ -49,12 +49,22 @@ nav .about{text-transform:uppercase}
 .view{position:absolute;right:24px;bottom:56px;font-size:110px;letter-spacing:-.04em;line-height:1;transform:scale(0);transform-origin:100% 100%;pointer-events:none}
 .foot{position:absolute;left:24px;right:24px;bottom:20px;display:flex;justify-content:space-between;font-size:13px;letter-spacing:-.02em;text-transform:uppercase;opacity:0}
 
-/* Custom cursor */
-.cur{position:fixed;left:0;top:0;z-index:30;pointer-events:none;width:64px;height:64px;margin:-32px 0 0 -32px;border:2.5px solid #fff;border-radius:50%;display:grid;place-items:center;font-size:22px;mix-blend-mode:difference}
-
+/* Showcase: 검정 갤러리 다음 구간 (왼쪽 설명 + 오른쪽 영상 4칸) */
+.showcase{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:4vw;padding:40px;opacity:0;pointer-events:none;color:#fff;will-change:opacity,transform}
+.sh-left{flex:0 1 34vw;min-width:0}
+.sh-title{font-size:clamp(40px,5.4vw,84px);letter-spacing:-.05em;line-height:.95;margin-bottom:14px}
+.sh-title span{display:block;color:#8d8d8d}
+.sh-sub{font-size:12px;letter-spacing:-.02em;color:#777;margin-bottom:36px}
+.sh-box{border:1.5px dashed rgba(255,255,255,.3);border-radius:14px;padding:20px 24px;margin-bottom:22px}
+.sh-box h4{font-size:18px;font-weight:500;letter-spacing:-.03em;margin-bottom:10px}
+.sh-box p{font-size:12px;line-height:1.5;color:#8d8d8d;letter-spacing:-.02em;white-space:pre-line}
+.sh-grid{flex:none;width:min(56vw,calc(100vh - 80px));width:min(56vw,calc(100lvh - 80px));aspect-ratio:1/1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px}
+.sh-cell{position:relative;overflow:hidden;border-radius:12px;background:#151515}
+.sh-cell video,.sh-cell canvas{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
+.sh-src{position:absolute;width:2px;height:2px;opacity:0;pointer-events:none}
 
 /* 클릭 가능한 카드 */
-.card{cursor:none}
+.card{cursor:pointer}
 .card:focus-visible{outline:2px solid #fff;outline-offset:-2px}
 .logo,.caption{pointer-events:none}
 
@@ -62,58 +72,103 @@ nav .about{text-transform:uppercase}
 .detail{position:fixed;inset:0;z-index:20;background:#fff;color:#111;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
   opacity:0;visibility:hidden;transform:translateY(16px);transition:opacity .35s ease,transform .35s ease,visibility 0s linear .35s}
 .detail.open{opacity:1;visibility:visible;transform:none;transition:opacity .35s ease,transform .35s ease}
-.detail button,.detail a{font-family:inherit;font-weight:500;color:inherit;cursor:none}
+.detail button,.detail a{font-family:inherit;font-weight:500;color:inherit;cursor:pointer}
 .d-top{position:sticky;top:0;z-index:2;display:grid;grid-template-columns:1fr auto;align-items:center;padding:12px 16px;background:#fff;font-size:14px;letter-spacing:-.01em}
 .d-top .name{justify-self:start;background:none;border:0;font-size:15px;padding:0}
 .d-right{justify-self:end;display:flex;gap:8px}
 .pill{display:inline-block;padding:0;border-radius:0;background:none;border:0;font-size:15px;line-height:1;text-decoration:none}
 .pill.on{background:#111;color:#fff}
-.d-body{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:56px;padding:56px 72px 96px}
-.d-info{position:sticky;top:76px;align-self:start}
-.d-info h2{font-size:44px;font-weight:500;letter-spacing:-.045em;line-height:1.05;margin-bottom:28px}
-.d-info .tag{font-size:22px;line-height:1.3;letter-spacing:-.02em;margin-bottom:28px;max-width:640px}
-.d-info .desc{font-size:17px;line-height:1.65;color:#666;max-width:520px;margin-bottom:40px;white-space:pre-line}
-.meta{display:grid;grid-template-columns:1fr 1fr;gap:30px 24px;max-width:520px}
-.meta dt{color:#777;font-size:17px;margin-bottom:10px}
-.meta dd{font-size:17px}
-.d-imgs{display:grid;grid-template-columns:repeat(2,minmax(0,650px));gap:16px;align-items:start}
-.d-imgs img,.d-imgs .d-video{width:100%;aspect-ratio:650/810;object-fit:cover;display:block;background:#eee}
-.d-imgs .d-video{background:#000}
 .d-foot{text-align:center;color:#4c4c4c;font-size:13px;letter-spacing:-.02em;padding:0 16px 32px}
+
+/* 프로젝트 상세 창: 어두운 케이스 스터디 레이아웃 + 스크롤 등장 효과 */
+#detail{background:#0e0e0e;color:#fff;color-scheme:dark}
+#detail .d-top{background:transparent;color:#fff;mix-blend-mode:difference;height:44px;margin-bottom:-44px}
+.rv{opacity:0;transform:translateY(46px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none;transition-delay:var(--d,0s)}
+.dx-hero{position:relative;height:82vh;height:82svh;min-height:420px;overflow:hidden;background:#111}
+.dx-hero .m{position:absolute;left:0;top:-15%;width:100%;height:130%;object-fit:cover;display:block;will-change:transform}
+.dx-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(14,14,14,.85),rgba(14,14,14,0) 55%),rgba(0,0,0,.3);pointer-events:none}
+.dx-hero h1{position:absolute;z-index:1;left:24px;bottom:28px;max-width:78%;font-size:clamp(38px,6.2vw,96px);font-weight:500;letter-spacing:-.05em;line-height:.95}
+.dx-hero .tg{position:absolute;z-index:1;right:24px;bottom:34px;max-width:30%;font-size:11px;letter-spacing:.01em;text-transform:uppercase;line-height:1.4;text-align:right}
+.dx-wrap{width:min(1180px,64vw);margin:0 auto}
+.dx-row{display:grid;grid-template-columns:42fr 58fr;gap:0 24px;padding-top:80px}
+.dx-lab{font-size:11px;letter-spacing:.02em;text-transform:uppercase;color:#777}
+.dx-lead{font-size:clamp(17px,1.7vw,26px);line-height:1.35;letter-spacing:-.03em;margin-bottom:36px;white-space:pre-line}
+.dx-meta>div{display:flex;justify-content:space-between;gap:16px;border-top:1px solid #2a2a2a;padding:13px 0;font-size:11px;letter-spacing:.01em;text-transform:uppercase}
+.dx-meta span:first-child{color:#777}
+.dx-meta span:last-child{text-align:right}
+.dx-h{font-size:clamp(18px,1.6vw,26px);font-weight:500;letter-spacing:-.035em;margin-bottom:22px}
+.dx-p{font-size:14px;line-height:1.65;color:#b5b5b5;margin-bottom:14px;white-space:pre-line;letter-spacing:-.01em}
+.dx-ul{margin:0 0 18px 18px;font-size:14px;line-height:1.7;color:#b5b5b5}
+.dx-step{display:grid;grid-template-columns:clamp(88px,9vw,130px) 1fr;gap:20px;align-items:start;margin-bottom:26px}
+.dx-step .th{aspect-ratio:4/5;background:#1a1a1a;overflow:hidden}
+.dx-step .th img{width:100%;height:100%;object-fit:cover;display:block}
+.dx-step h4{font-size:16px;font-weight:500;letter-spacing:-.03em;margin:2px 0 8px}
+.dx-step p{font-size:13px;line-height:1.55;color:#999}
+.dx-media{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding-top:64px}
+.dx-m{aspect-ratio:650/810;overflow:hidden;background:#161616}
+.dx-m img,.dx-m video{width:100%;height:100%;object-fit:cover;display:block}
+/* Explore more: 사진이 오른쪽으로 천천히 계속 지나감 */
+.dx-ex{padding-top:140px}
+.dx-ex h3{font-size:clamp(22px,2.2vw,34px);font-weight:500;letter-spacing:-.04em;margin:0 24px 18px;text-transform:uppercase}
+.ex-view{overflow:hidden}
+.ex-track{display:flex;width:max-content;animation:exr 80s linear infinite}
+@keyframes exr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.ex-item{flex:none;width:clamp(170px,23vw,360px);cursor:pointer}
+.ex-item .ph{aspect-ratio:2/3;overflow:hidden;background:#151515}
+.ex-item img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1);transition:filter .5s ease,transform .8s ease}
+.ex-item.hot img{filter:none;transform:scale(1.04)}
+.ex-item .cap{height:36px;padding:11px 8px 0;font-size:11px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transform:translateY(-4px);transition:opacity .35s ease,transform .35s ease}
+.ex-item.hot .cap{opacity:1;transform:none}
+.dx-big{font-size:clamp(80px,17vw,300px);font-weight:500;letter-spacing:-.06em;line-height:.9;text-align:center;padding:160px 16px 56px;text-transform:uppercase}
+@media(hover:none){.ex-item{cursor:pointer}.ex-item img{filter:none}.ex-item .cap{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.ex-track{animation-duration:240s}}
 @media(max-width:900px){
  .detail button,.detail a{cursor:pointer}
- .d-body{grid-template-columns:1fr;gap:32px;padding:24px 16px 64px}
- .d-info{position:static}.d-info h2{font-size:34px}.d-info .tag{font-size:19px}
- .d-imgs{grid-template-columns:minmax(0,650px)}
+ .ex-item{cursor:pointer}
+ .dx-wrap{width:auto;padding:0 16px}
+ .dx-row{grid-template-columns:1fr;gap:16px;padding-top:56px}
+ .dx-hero h1{left:16px;bottom:22px;max-width:92%}.dx-hero .tg{display:none}
+ .dx-ex h3{margin-left:16px}
 }
 @media(hover:none){.detail button,.detail a{cursor:pointer}}
 
 
-/* ABOUT 창 */
-.a-body{padding:56px 72px 96px}
-.a-intro{font-size:40px;line-height:1.28;letter-spacing:-.045em;max-width:1280px;margin-bottom:56px;white-space:pre-line}
-.a-grid{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1.5fr);gap:32px;align-items:start}
-.a-img img{width:100%;display:block;aspect-ratio:5/4;object-fit:cover;background:#eee}
-.a-secs{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-content:start}
-.a-secs section{border-top:1px solid #e6e6e6;padding:24px 0 48px}
-.a-secs h3{font-size:17px;font-weight:500;color:#777;letter-spacing:-.02em;margin-bottom:18px}
-.a-secs li{list-style:none;font-size:17px;line-height:1;letter-spacing:-.02em;padding-bottom:18px}
+/* ABOUT 창: 스크롤하면 글씨와 줄선이 부드럽게 떠오름 (.rv 효과 공용) */
+.ab-wrap{width:min(1480px,76vw);margin:0 auto;padding:clamp(56px,7vw,110px) 0 0}
+.ab-top{display:grid;grid-template-columns:minmax(0,1fr) clamp(200px,21vw,420px);gap:4vw;align-items:end}
+.ab-title{font-size:clamp(34px,3.1vw,58px);font-weight:500;letter-spacing:-.045em;line-height:1;margin-bottom:clamp(22px,2vw,34px)}
+.ab-p{font-size:clamp(15px,1.25vw,20px);line-height:1.6;letter-spacing:-.02em;color:#666;max-width:600px;margin-bottom:1.1em;white-space:pre-line}
+.ab-img{aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:#eee}
+.ab-img img{width:100%;height:100%;object-fit:cover;display:block}
+.ab-sec{display:grid;grid-template-columns:20% minmax(0,1fr);gap:0 24px;padding-top:clamp(80px,9vw,140px)}
+.ab-lab{font-size:clamp(20px,1.6vw,28px);font-weight:500;letter-spacing:-.04em;line-height:1.1;padding-top:clamp(14px,1.2vw,22px)}
+.ab-2{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
+.ab-row{padding:clamp(18px,1.5vw,26px) 0;border-bottom:1px solid #e6e6e6;font-size:clamp(15px,1.15vw,18px);letter-spacing:-.02em;color:#777}
+.ab-row b{font-weight:500;color:#111}
+.ab-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 16px}
+.ab-3 .wide{grid-column:1 / span 2}
+.ab-foot{padding:clamp(100px,10vw,160px) 22px 18px;font-size:12px;letter-spacing:-.02em;text-transform:uppercase;color:#111}
 @media(max-width:900px){
- .a-body{padding:24px 16px 64px}.a-intro{font-size:26px;margin-bottom:32px}
- .a-grid{grid-template-columns:1fr}.a-secs{gap:0 20px}
+ .ab-wrap{width:auto;padding:24px 16px 0}
+ .ab-top{grid-template-columns:1fr;gap:28px}.ab-img{width:min(100%,420px)}
+ .ab-sec{grid-template-columns:1fr;gap:6px;padding-top:64px}
+ .ab-2{grid-template-columns:1fr}
+ .ab-foot{padding:80px 16px 18px}
 }
 
 @media(max-width:1023.98px){.wordmark{font-size:80px}.view{font-size:72px}}
 @media(max-width:639.98px){
  :root{--hero:.92}
- body{cursor:auto}.cur{display:none}
  nav{--nav-gap:20px;left:auto;right:24px;top:18px;justify-content:flex-end}
  .logo{top:54px}.wordmark{font-size:56px}.caption{top:128px}
  :root{--gap:8px}
  .grid{grid-template-columns:repeat(3,1fr);row-gap:calc(var(--gap)*2)}.card{grid-column:var(--mc);grid-row:var(--mr)}
  .info .label{font-size:22px}.info .num{font-size:56px}.view{font-size:56px}
+ .showcase{flex-direction:column;justify-content:center;gap:20px;padding:70px 16px 24px}
+ .sh-left{flex:none;width:100%}.sh-sub,.sh-box{display:none}.sh-title{font-size:40px;margin-bottom:0}
+ .sh-grid{width:min(calc(100vw - 32px),52vh)}
 }
-@media(hover:none){body{cursor:auto}.cur{display:none}}
 @media(prefers-reduced-motion:reduce){.card{transform:scale(1)!important}}
 </style>
 </head>
@@ -128,13 +183,23 @@ nav .about{text-transform:uppercase}
   <section class="gallery" id="gallery"><div class="grid" id="grid"></div></section>
   <div class="overlay" id="overlay"></div>
 
+  <section class="showcase" id="showcase">
+    <div class="sh-left" id="shLeft"></div>
+    <div class="sh-grid">
+      <div class="sh-cell"><video id="sh1" muted loop playsinline preload="auto"></video></div>
+      <div class="sh-cell"><canvas id="shTop"></canvas></div>
+      <div class="sh-cell"><video id="sh3" muted loop playsinline preload="auto"></video></div>
+      <div class="sh-cell"><canvas id="shBot"></canvas></div>
+    </div>
+    <video id="shSrc" class="sh-src" muted loop playsinline preload="auto"></video>
+  </section>
+
   <div class="logo"><div class="wordmark">Kim Rayoon</div><div class="mark">RY</div></div>
   <p class="caption">A visual storyteller based in Korea, passionate about capturing moments that feel real, raw, and timeless. For me, photography and cinematography are more than just creative mediums. They’re a way of preserving emotions, energy, and stories that often go unnoticed.</p>
   <nav>
     <a class="about" href="#">About</a>
     <div class="right">
       <div class="menu"><i></i><i></i></div>
-      <a href="mailto:pepery249@gmail.com">[ CONTACT ]</a>
     </div>
   </nav>
 
@@ -142,7 +207,7 @@ nav .about{text-transform:uppercase}
     <div><div class="circle">9</div><div class="label">create with insight<br>“Content Maketer”</div></div>
     <div class="num">2026</div>
   </div>
-  <a class="view" id="view" href="https://www.instagram.com/kra.yoon" target="_blank" rel="noopener">view</a>
+  <a class="view" id="view" href="https://www.instagram.com/k.ray.oon" target="_blank" rel="noopener">view</a>
   <div class="foot" id="foot"><span>KIMRAYOON © 2026</span><span>infocus.with.rayoon</span></div>
 </div>
 <div class="detail" id="detail" role="dialog" aria-modal="true" aria-hidden="true">
@@ -152,11 +217,7 @@ nav .about{text-transform:uppercase}
       <button class="pill" data-close type="button">Close ✕</button>
     </div>
   </div>
-  <div class="d-body">
-    <div class="d-info" id="dInfo"></div>
-    <div class="d-imgs" id="dImgs"></div>
-  </div>
-  <div class="d-foot">©2026 Kim Rayoon</div>
+  <div class="dx" id="dx"></div>
 </div>
 <div class="detail" id="about" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="d-top">
@@ -165,22 +226,21 @@ nav .about{text-transform:uppercase}
   </div>
   <div class="a-body" id="aBody"></div>
 </div>
-<div class="cur" id="cur">R</div>
 
 <script>
 (function(){
   var B='images/';
   // [id, width, 열(1~4), alt]
   var P=[
-   ['image1',1200,4,'yido 율 디저트볼'],
-   ['image2',1200,1,'yido 달항아리'],
-   ['image3',1161,3,'yido 윤슬 면기'],
-   ['image4',1200,4,''],
-   ['image5',1203,2,'rabbit hat girl'],
+   ['image1',1200,4,'yido 달항아리 & 율 디저트볼'],
+   ['image2',1200,1,'KIHIN'],
+   ['image3',1161,3,'THE SIMS 4 & ZEPETO'],
+   ['image4',1200,4,'HYDR LAB'],
+   ['image5',1203,2,'Rabbit Hat Girl'],
    ['image6',1200,1,'check pattern magazine girl'],
    ['image7',1200,3,'dark fantasy romace'],
-   ['image8',1350,4,'한복린'],
-   ['image6',1203,2,'Berry parfait, food in motion'],
+   ['image8',1350,4,'Hanbok Lyn'],
+   ['image9',1203,2,'Berry parfait, food in motion'],
    ['image7',1203,1,'Portrait session at home']
   ];
   /* 모바일(3열) 배치: [열, 줄] — 빈 칸을 띄우며 지그재그로 배치
@@ -210,97 +270,226 @@ nav .about{text-transform:uppercase}
 
   /* ---- 상세 창 ----
      D[i] = P[i]와 같은 순서(0번이 첫 번째 사진). 비워두면 기본값이 들어가요.
-     imgs: 오른쪽에 보여줄 이미지 파일명(확장자 제외, images/ 폴더) — 여러 장 가능 */
+     imgs: 이미지 파일명(확장자 제외, images/ 폴더) / 영상은 확장자까지(videos/ 폴더) — 여러 개 가능
+           (titleImg를 따로 안 적으면 imgs의 첫 번째가 맨 위 큰 사진, 나머지는 아래 갤러리에 2열로 나와요)
+     선택 항목 (적은 것만 화면에 나와요):
+       titleImg:'파일명'  <- 맨 위 큰 사진(30% 어둡게). 적으면 imgs는 전부 아래 갤러리에 나와요
+       client:'클라이언트'
+       premise:{title:'', text:'문단은 빈 줄로 구분'}
+       process:[{img:'파일명', title:'', text:''}, ...]
+       outcome:{title:'', bullets:['', ''], text:''} */
   var D=[
-    {title:'yido 율 디저트볼',
-     tag:'이도 도자기 율 디저트볼',
-     desc:'.\n.',
-     year:'2026', time:'2 weeks', tools:'Midjourney, Photoshop', cat:'Product',
-     imgs:['image1','image1-2']},
+    {title:'ZEPETO',
+     tag:'게임 아이템 기획 및 제작',
+     desc:'가상 공간에서 개성을 표현할 수 있는 패션 아이템을 기획하고 3D 콘텐츠로 제작했습니다.\n줄바꿈도 가능해요.',
+     year:'2026', time:'2 weeks', tools:'Adobe Photoshop, Blender, Unity', cat:'3D Content',
+     client:'ZEPETO',
+     premise:{title:'가상 공간 속 개성을 완성하는 아이템', text:'사용자의 취향과 개성을 반영한 패션 아이템을 기획하고, 가상 캐릭터에 적용할 수 있는 3D 콘텐츠로 구현했습니다.\n\n아이템 제작부터 플랫폼 등록 및 판매까지 직접 진행했습니다.'},
+     process:[
+       {img:'image1-2', title:'Step 01', text:'과정 설명을 적어주세요.'},
+       {img:'image1-3', title:'Step 02', text:'과정 설명을 적어주세요.'},
+       {img:'image1-4', title:'Step 03', text:'과정 설명을 적어주세요.'}
+     ],
+     outcome:{title:'여기에 결과 소제목', bullets:['결과 1','결과 2'], text:'여기에 결과 설명을 적어주세요.'},
+     imgs:['image1','image1-2','image1-3','image1-4','image1-5']},
     {// 2번: 두 번째 사진 (image2)
-    title:'yido 달항아리',
-    tag:'달항아리 한 줄 소개',
+    title:'KIHIN',
+    tag:'KIHIN 악세서리 쇼핑몰 운영',
     desc:'달항아리 작업 설명',
-    year:'2026', time:'3 hours', tools:'Midjourney, Photoshop', cat:'Product',
-    imgs:['image2','image2-2']},
+    year:'2017', time:'3 hours', tools:'Midjourney,Adobe Photoshop', cat:'Product',
+    imgs:['image2','image2-1','image2-2']},
     {// 3번: 두 번째 사진 (image3)
-    title:'.',
-    tag:'한 줄 소개',
-    desc:'작업 설명',
-    year:'2026', time:'1 week', tools:'Midjourney, Photoshop', cat:'Product',
-    imgs:['image2','image2-detail1']},
+    title:'The Sims 4',
+     tag:'게임 아이템 기획 및 제작',
+     desc:'The Sims 4 게임 아이템을 제작했습니다.\n다운로드 수 .',
+     year:'2026', time:'2 weeks', tools:'Adobe Photoshop, Unity, Blender', cat:'Product',
+     client:'yido',
+     premise:{title:'여기에 소제목', text:'여기에 기획 의도를 적어주세요.\n\n문단은 빈 줄로 나눠요.'},
+     process:[
+       {img:'image1-2', title:'Step 01', text:'과정 설명을 적어주세요.'},
+       {img:'image1-3', title:'Step 02', text:'과정 설명을 적어주세요.'},
+       {img:'image1-4', title:'Step 03', text:'과정 설명을 적어주세요.'}
+     ],
+     outcome:{title:'여기에 결과 소제목', bullets:['결과 1','결과 2'], text:'여기에 결과 설명을 적어주세요.'},
+     imgs:['image3','image3-1','image3-2','image3-4','image3-5']},
     {// 4번: 네 번째 사진 (image4)
-    title:'HYDR LAB Skin Care Brand',
-    tag:'HYDR LAB Hydrogel Mask',
-    desc:'피부의 수분 케어를 과학적으로 설계한다는 뜻의 가상의 스킨케어 브랜드 HYDR LAB 입니다. HYDR LAB의 과학적인 이미지에 초점을 맞춰 현대적이고 직관적인 제품의 정보를 나타내는 광고 피드 이미지와 숏츠 영상을 작업했습니다. 모델의 마스크 제품 착용 사진과 에센스를 함유한 겔 재질의 특성을 담았습니다.',
-    year:'2026', time:'2 Days', tools:'ChatGPT, Magnific, Midjourney, Photoshop, After Effect', cat:'Product',
-    imgs:['image4','image4-1','image4-2','image4-3','image4-4','hydr-lab.mp4','hydr-lab1.mp4','hydr-lab2.mp4']},
+    title:'HYDR LAB Hydrogel Mask',
+     tag:'HYDR LAB',
+     desc:'피부의 수분 케어를 과학적으로 설계한다는 뜻의 가상의 스킨케어 브랜드 HYDR LAB 입니다. HYDR LAB의 과학적인 브랜드 이미지에 초점을 맞추고, 모델의 마스크 제품 착용 사진과 에센스를 함유한 겔 재질의 특성을 담은 제품 비주얼 및 디지털 광고 콘텐츠를 제작했습니다.\n줄바꿈도 가능해요.',
+     year:'2026', time:'2 Days', tools:'Chat GPT, Magnific, Midjourney,Adobe Photoshop,Adobe After Effect', cat:'Product',
+     client:'HYDR LAB',
+     premise:{title:'여기에 소제목', text:'여기에 기획 의도를 적어주세요.\n\n문단은 빈 줄로 나눠요.'},
+     process:[
+       {img:'image1-2', title:'Step 01', text:'과정 설명을 적어주세요.'},
+       {img:'image1-3', title:'Step 02', text:'과정 설명을 적어주세요.'},
+       {img:'image1-4', title:'Step 03', text:'과정 설명을 적어주세요.'}
+     ],
+     outcome:{title:'여기에 결과 소제목', bullets:['결과 1','결과 2'], text:'여기에 결과 설명을 적어주세요.'},
+     imgs:['image4','image4-1','image4-2','image4-3','image4-4','hydr-lab.mp4','hydr-lab1.mp4','hydr-lab2.mp4']},
     {// 5번: 다섯 번째 사진 (image5)
-    title:'rabbit hat girl',
-    tag:'아동 의류 컨셉 화보',
-    desc:'밝고 순수한 느낌을 살려',
-    year:'2026', time:'1 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
-    imgs:['image5','image5-2','image5-3','image5-4']},
+    title:'아동 의류 컨셉 화보 이미지',
+     tag:'Rabbit Hat Girl',
+     desc:'피부의 수분 케어를 과학적으로 설계한다는 뜻의 가상의 스킨케어 브랜드 HYDR LAB 입니다. HYDR LAB의 과학적인 브랜드 이미지에 초점을 맞추고, 모델의 마스크 제품 착용 사진과 에센스를 함유한 겔 재질의 특성을 담은 제품 비주얼 및 디지털 광고 콘텐츠를 제작했습니다.\n줄바꿈도 가능해요.',
+     year:'2026', time:'2 Days', tools:'ChatGPT, Magnific, Midjourney,Adobe Photoshop,Adobe After Effect', cat:'Product',
+     client:'HYDR LAB',
+     premise:{title:'여기에 소제목', text:'여기에 기획 의도를 적어주세요.\n\n문단은 빈 줄로 나눠요.'},
+     process:[
+       {img:'image1-2', title:'Step 01', text:'과정 설명을 적어주세요.'},
+       {img:'image1-3', title:'Step 02', text:'과정 설명을 적어주세요.'},
+       {img:'image1-4', title:'Step 03', text:'과정 설명을 적어주세요.'}
+     ],
+     outcome:{title:'여기에 결과 소제목', bullets:['결과 1','결과 2'], text:'여기에 결과 설명을 적어주세요.'},
+     titleImg:'image5',
+     imgs:['image5','image5-1','image5-2','image5-3']},
     {// 6번: 다섯 번째 사진 (image6)
-    title:'Character Illustration & Video',
-    tag:'Fashion Magazine Illustration - Photo Magazine Concept',
-    desc:'캐릭터의 콘셉트와 비주얼 방향을 기획하고, ComfyUI를 활용해 애니메이션 콘텐츠로 구현했습니다. ',
-    year:'2026', time:'2 Days', tools:'ChatGPT, Photoshop, ComfyUI, After Effect', cat:'ART DIRECTION',
-    imgs:['image6','girl-magazine.mp4']},
-    {// 5번: 다섯 번째 사진 (image7)
-    title:'rabbit hat girl',
-    tag:'아동 의류 컨셉 화보',
+    title:'AI Character Illustration & Video',
+     tag:'Fashion Magazine Concept',
+     desc:'캐릭터의 콘셉트와 비주얼 방향을 기획하고, AI를 활용해 애니메이션 콘텐츠로 구현했습니다.',
+     year:'2026', time:'2 Days', tools:'ChatGPT, Photoshop, ComfyUI, After Effect', cat:'ART DIRECTION',
+     client:'HYDR LAB',
+     premise:{title:'여기에 소제목', text:'여기에 기획 의도를 적어주세요.\n\n문단은 빈 줄로 나눠요.'},
+     process:[
+       {img:'image1-2', title:'Step 01', text:'과정 설명을 적어주세요.'},
+       {img:'image1-3', title:'Step 02', text:'과정 설명을 적어주세요.'},
+       {img:'image1-4', title:'Step 03', text:'과정 설명을 적어주세요.'}
+     ],
+     outcome:{title:'여기에 결과 소제목', bullets:['결과 1','결과 2'], text:'여기에 결과 설명을 적어주세요.'},
+     titleImg:'image6',
+     imgs:['image6','girl-magazine.mp4']},
+    {// 7번: 다섯 번째 사진 (image7)
+    title:'AI Illustration Image',
+    tag:'Dark Fantasy Romace',
     desc:'밝고 순수한 느낌을 살려',
     year:'2026', time:'1 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
-    imgs:['image5','image5-1']},
-    {// 5번: 다섯 번째 사진 (image8)
-    title:'rabbit hat girl',
-    tag:'아동 의류 컨셉 화보',
-    desc:'밝고 순수한 느낌을 살려',
-    year:'2026', time:'3 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
-    imgs:['image8','image8-2','image8-3']},
+    imgs:['image7']},
     {// 8번: 다섯 번째 사진 (image8)
+    title:'한복린 한복 화보 이미지',
+     tag:'Hanbok Lyn',
+     desc:'피부의 수분 케어를 과학적으로 설계한다는 뜻의 가상의 스킨케어 브랜드 HYDR LAB 입니다. HYDR LAB의 과학적인 브랜드 이미지에 초점을 맞추고, 모델의 마스크 제품 착용 사진과 에센스를 함유한 겔 재질의 특성을 담은 제품 비주얼 및 디지털 광고 콘텐츠를 제작했습니다.\n줄바꿈도 가능해요.',
+     year:'2026', time:'2 Days', tools:'ChatGPT, Magnific, Midjourney, Photoshop, After Effect', cat:'Product',
+     client:'HYDR LAB',
+     premise:{title:'여기에 소제목', text:'여기에 기획 의도를 적어주세요.\n\n문단은 빈 줄로 나눠요.'},
+     process:[
+       {img:'image1-2', title:'Step 01', text:'과정 설명을 적어주세요.'},
+       {img:'image1-3', title:'Step 02', text:'과정 설명을 적어주세요.'},
+       {img:'image1-4', title:'Step 03', text:'과정 설명을 적어주세요.'}
+     ],
+     outcome:{title:'여기에 결과 소제목', bullets:['결과 1','결과 2'], text:'여기에 결과 설명을 적어주세요.'},
+     titleImg:'image8-1',
+     imgs:['image8','image8-1','image8-2','image8-3','image8-4','image8-5']},
+    {// 9번: 다섯 번째 사진 (image9)
     title:'hanbok lyn',
     tag:'아동 의류 컨셉 화보',
     desc:'밝고 순수한 느낌을 살려',
     year:'2026', time:'3 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
-    imgs:['image8','image8-2','image8-2']},
-    {// 9번: 다섯 번째 사진 (image5)
-    title:'rabbit hat girl',
-    tag:'아동 의류 컨셉 화보',
+    imgs:['image9','twoman.mp4','image9-1','image9-2']},
+    {// 10번: 다섯 번째 사진 (image10)
+    title:'Blender',
+    tag:'Blender',
     desc:'밝고 순수한 느낌을 살려',
     year:'2026', time:'1 day', tools:'ChatGPT, Photoshop', cat:'ART DIRECTION',
-    imgs:['image5','image5-1']}
+    imgs:['image9','image9-1','image9-2']}
   ];
-  var det=document.getElementById('detail'),dInfo=document.getElementById('dInfo'),dImgs=document.getElementById('dImgs');
+  var det=document.getElementById('detail'),dx=document.getElementById('dx');
   var openIdx=-1,openEl=null,opener=null;
   function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
+  var DX_END='Thank you';                          // 상세창 맨 아래 큰 글씨 (여기를 수정하세요)
+  var vidRe=/\.(mp4|webm|mov|m4v)$/i,imgRe=/\.(png|jpe?g|webp|gif|avif)$/i;
+  function imgSrc(f){return imgRe.test(f)?B+f:B+f+'.png';}     // 확장자 없으면 .png
+  function paras(t){return String(t||'').split(/\n\s*\n/).filter(function(s){return s.trim();}).map(function(s){return '<p class="dx-p">'+esc(s.trim())+'</p>';}).join('');}
+  function row(label,inner,plain){return '<div class="dx-wrap"><div class="dx-row'+(plain?'':' rv')+'"><div class="dx-lab">'+label+'</div><div>'+inner+'</div></div></div>';}
+  function mediaGrid(list,alt){
+    if(!list.length)return '';
+    return '<div class="dx-wrap"><div class="dx-media">'+list.map(function(f,k){
+      return '<div class="dx-m rv" style="--d:'+((k%2)*.12)+'s">'+(vidRe.test(f)
+        ?'<video src="videos/'+esc(f)+'" controls playsinline preload="metadata"></video>'
+        :'<img loading="lazy" src="'+esc(imgSrc(f))+'" alt="'+esc(alt)+'">')+'</div>';
+    }).join('')+'</div></div>';
+  }
+  var dxIO=null,exHot=null;
+  /* 스크롤 등장 효과: 요소의 '레이아웃 위치(offsetTop)'로 보이는지 판단해요.
+     (예전에는 IntersectionObserver로 움직이는 요소 자체를 관찰해서, 가장자리에서 떠오르는 움직임 때문에
+      보임/안 보임이 계속 뒤집히며 덜덜 떨렸어요. offsetTop은 transform 영향을 안 받아서 안정적이에요) */
+  function rvBind(root,scope){
+    var els=Array.prototype.slice.call(scope.querySelectorAll('.rv')),raf=0;
+    if(reduce){els.forEach(function(n){n.classList.add('in');});return {stop:function(){}};}
+    function topOf(el){var y=0,n=el;while(n&&n!==root){y+=n.offsetTop;n=n.offsetParent;}return y;}
+    function run(){
+      raf=0;var st=root.scrollTop,ch=root.clientHeight;
+      els.forEach(function(el){
+        var t=topOf(el)-st,h=el.offsetHeight;
+        el.classList.toggle('in',t<ch*.94&&t+h>0);             // 아래에서 조금 보이기 시작하면 떠오르고, 완전히 벗어나면 숨겨요
+      });
+    }
+    function req(){if(!raf)raf=requestAnimationFrame(run);}
+    root.addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
+    void root.offsetHeight;                                    // 처음 한 번 스타일을 확정해서 열 때도 떠오르는 효과가 나오게
+    run();
+    return {stop:function(){root.removeEventListener('scroll',req);removeEventListener('resize',req);if(raf)cancelAnimationFrame(raf);}};
+  }
+  function dxCleanup(){if(dxIO){dxIO.stop();dxIO=null;}}
+  dx.addEventListener('click',function(e){                     // Explore more 사진 클릭 -> 그 프로젝트로 이동
+    var it=e.target.closest&&e.target.closest('.ex-item');
+    if(it)openDetail(+it.dataset.i);
+  });
+  (function dxLoop(){
+    if(openEl===det){
+      if(mx!==null){                                           // 지나가는 사진 위에 마우스가 있으면 그 순간 그 사진만 컬러 + 글씨
+        var el=document.elementFromPoint(tx,ty),it=el&&el.closest?el.closest('.ex-item'):null;
+        if(it!==exHot){if(exHot)exHot.classList.remove('hot');if(it)it.classList.add('hot');exHot=it;}
+      }
+      var hm=det.querySelector('.dx-hero .m');                 // 맨 위 큰 사진은 스크롤보다 살짝 느리게
+      if(hm){var st=Math.min(det.scrollTop,det.clientHeight);hm.style.transform='translateY('+(st*.15)+'px)';}
+    }else if(exHot){exHot.classList.remove('hot');exHot=null;}
+    requestAnimationFrame(dxLoop);
+  })();
   function openDetail(i){
     var p=P[i],d=D[i]||{},title=d.title||p[3];
-    var imgs=(d.imgs&&d.imgs.length)?d.imgs:[p[0]];
-    dInfo.innerHTML='<h2>'+esc(title)+'</h2>'
-      +(d.tag?'<p class="tag">'+esc(d.tag)+'</p>':'')
-      +(d.desc?'<p class="desc">'+esc(d.desc)+'</p>':'')
-      +'<dl class="meta">'
-      +'<div><dt>Year</dt><dd>'+esc(d.year||'2026')+'</dd></div>'
-      +'<div><dt>Timeframe</dt><dd>'+esc(d.time||'—')+'</dd></div>'
-      +'<div><dt>Tools</dt><dd>'+esc(d.tools||'—')+'</dd></div>'
-      +'<div><dt>Category</dt><dd>'+esc(d.cat||'—')+'</dd></div></dl>';
-    dImgs.innerHTML=imgs.map(function(f){
-      if(/\.(mp4|webm|mov|m4v)$/i.test(f)){          // 영상: 확장자까지 적으면 videos/ 폴더에서 불러옴
-        return '<video class="d-video" src="videos/'+esc(f)+'" controls playsinline preload="metadata"></video>';
-      }
-      return '<img loading="lazy" src="'+B+f+'.png" alt="'+esc(title)+'">';
+    var imgs=(d.imgs&&d.imgs.length)?d.imgs.slice():[p[0]];
+    var ti=d.titleImg||d.hero;                                  // 타이틀 이미지(맨 위 큰 사진)를 따로 적으면 imgs는 전부 아래 갤러리에 나와요
+    var hero=ti||imgs[0],list=ti?imgs:imgs.slice(1);            // 안 적으면 imgs의 첫 번째가 맨 위 큰 사진(아래엔 안 나옴)
+    var h='<header class="dx-hero">'
+      +(vidRe.test(hero)?'<video class="m" src="videos/'+esc(hero)+'" autoplay muted loop playsinline></video>'
+                        :'<img class="m" src="'+esc(imgSrc(hero))+'" alt="'+esc(title)+'">')
+      +'<h1 class="rv">'+esc(title)+'</h1>'
+      +(d.tag?'<p class="tg rv" style="--d:.15s">'+esc(d.tag)+'</p>':'')+'</header>';
+    var meta=[['Client',d.client],['Year',d.year||'2026'],['Timeframe',d.time],['Tools',d.tools],['Category',d.cat]].filter(function(r){return r[1];});
+    h+=row('Details','<p class="dx-lead">'+esc(d.desc||d.tag||'')+'</p><div class="dx-meta">'
+      +meta.map(function(r){return '<div><span>'+r[0]+'</span><span>'+esc(r[1])+'</span></div>';}).join('')+'</div>');
+    h+=mediaGrid(list.slice(0,2),title);
+    if(d.premise)h+=row('Premise','<h3 class="dx-h">'+esc(d.premise.title||'')+'</h3>'+paras(d.premise.text));
+    if(d.process&&d.process.length)h+=row('My process',d.process.map(function(s,k){
+      return '<div class="dx-step rv" style="--d:'+(k*.06)+'s"><div class="th">'+(s.img?'<img loading="lazy" src="'+esc(imgSrc(s.img))+'" alt="">':'')
+        +'</div><div><h4>'+esc(s.title)+'</h4><p>'+esc(s.text)+'</p></div></div>';
+    }).join(''),true);
+    h+=mediaGrid(list.slice(2),title);
+    if(d.outcome){var oc=d.outcome;
+      h+=row('Outcome','<h3 class="dx-h">'+esc(oc.title||'')+'</h3>'
+        +(oc.bullets&&oc.bullets.length?'<ul class="dx-ul">'+oc.bullets.map(function(b){return '<li>'+esc(b)+'</li>';}).join('')+'</ul>':'')
+        +paras(oc.text));}
+    var ex=[];for(var j=0;j<P.length;j++)if(j!==i)ex.push(j);
+    var base=ex.slice();while(base.length<6&&ex.length)base=base.concat(ex);
+    var items=base.map(function(j){
+      var t=(D[j]&&D[j].title)||P[j][3];
+      return '<div class="ex-item" data-i="'+j+'"><div class="ph"><img loading="lazy" src="'+B+P[j][0]+'.png" alt="'+esc(t)+'"></div><div class="cap">'+esc(t)+'</div></div>';
     }).join('');
+    h+='<section class="dx-ex"><h3 class="rv">Explore more</h3><div class="ex-view"><div class="ex-track" style="animation-duration:'+(base.length*9)+'s">'+items+items+'</div></div></section>';
+    h+='<div class="dx-big rv">'+esc(DX_END)+'</div><div class="d-foot">©2026 Kim Rayoon</div>';
+    dxCleanup();
+    dx.innerHTML=h;
     det.scrollTop=0;
-    opener=document.activeElement;
+    dxIO=rvBind(det,dx);                                       // 스크롤로 들어오면 떠오르고, 벗어나면 다시 숨겨서 올릴 때도 같은 효과
+    if(!openEl)opener=document.activeElement;
     det.classList.add('open');det.setAttribute('aria-hidden','false');
     document.documentElement.style.overflow='hidden';
-    openIdx=i;openEl=det;
+    openIdx=i;openEl=det;setHash('work-'+i);
     var cb=det.querySelector('[data-close]');if(cb)cb.focus({preventScroll:true});
   }
   function closeDetail(){
     if(!openEl)return;
+    if(openEl===det)dxCleanup();
+    if(openEl===aEl&&aIO){aIO.stop();aIO=null;}
+    setHash('');
     Array.prototype.forEach.call(openEl.querySelectorAll('video'),function(v){v.pause();});   // 닫을 때 영상 정지
     openEl.classList.remove('open');openEl.setAttribute('aria-hidden','true');
     openEl=null;openIdx=-1;
@@ -309,25 +498,50 @@ nav .about{text-transform:uppercase}
   }
 
   /* ---- ABOUT 창 내용 (여기를 수정하세요) ----
-     image: images/ 폴더의 파일명(확장자 .png 제외). 비우면('') 이미지 칸이 비어요.
-     sections: 오른쪽 목록 (제목 + 항목들). 원하는 만큼 추가/삭제 가능 */
+     title / paras: 왼쪽 큰 제목과 소개 문단들 (문단은 원하는 만큼)
+     image: images/ 폴더의 파일명(확장자 .png 제외). 비우면('') 사진이 안 나와요.
+     skills: 목록(2열) / experience: 이름·역할·기간 / training: 이름·기간(count에 적은 기간이 Experience의 기간 칸에 맞춰져요)
+     목록은 비워두면([]) 그 구간이 통째로 사라져요 */
   var A={
-    intro:'아이디어를 새로운 시각으로 해석하고,\n 브랜드의 가치를 콘텐츠로 전달하는 비주얼 스토리텔러입니다.',
-    image:'image1',
-    sections:[
-      {title:'Capabilities',     items:['Photography','Cinematography','Content Planning','Visual Direction']},
-      {title:'Selected Clients', items:['yido','Client 02','Client 03','Client 04']},
-      {title:'Recognition',      items:['수정중','수정중','수정중']}
+    title:'About',
+    paras:[
+      '아이디어를 새로운 시각으로 해석하고,\n브랜드의 가치를 콘텐츠로 전달하는 비주얼 스토레텔러입니다.',
+      ' 어떤 클라이언트와 어떤 방식으로 일하는지 적어보세요.'
+    ],
+    image:'my',
+    skills:['Photography','Video Editing','Content Planning','3D Modeling','AI Content Production'],
+    experience:[
+      {name:'회사 / 클라이언트 01', role:'역할', period:'2024 — Present'},
+      {name:'회사 / 클라이언트 02', role:'역할', period:'2022 — 2024'},
+      {name:'회사 / 클라이언트 03', role:'역할', period:'2020 — 2022'}
+    ],
+    training:[
+      {name:'3D프린터활용 캐릭터피규어제작 향상', count:'2026.07 ~ 2026.10'},
+      {name:'주얼리 취업,창업 실무 전문과정', count:'2026.02 ~ 2026.05'},
+      {name:'제페토(블렌더) 크리에이터 교육', count:'2023.08 ~ 2023.09'},
+      {name:'스마트웹 콘텐츠(반응형 웹) 양성과정', count:'2018.09 ~ 2019.02'}
     ]
   };
-  var aEl=document.getElementById('about'),aBody=document.getElementById('aBody');
+  var aEl=document.getElementById('about'),aBody=document.getElementById('aBody'),aIO=null;
+  function setHash(h){try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}}   // 새로고침해도 같은 창이 맨 위에서 다시 열리게
+  function abSec(label,inner){return '<section class="ab-sec"><h3 class="ab-lab rv">'+label+'</h3><div>'+inner+'</div></section>';}
   function openAbout(){
-    aBody.innerHTML='<p class="a-intro">'+esc(A.intro)+'</p>'
-      +'<div class="a-grid"><div class="a-img">'+(A.image?'<img loading="lazy" src="'+B+A.image+'.png" alt="">':'')+'</div>'
-      +'<div class="a-secs">'+A.sections.map(function(sec){
-        return '<section><h3>'+esc(sec.title)+'</h3><ul>'+sec.items.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul></section>';
-      }).join('')+'</div></div>';
+    var h='<div class="ab-wrap"><div class="ab-top"><div>'
+      +'<h2 class="ab-title rv">'+esc(A.title)+'</h2>'
+      +(A.paras||[]).map(function(t,k){return '<p class="ab-p rv" style="--d:'+((k+1)*.1)+'s">'+esc(t)+'</p>';}).join('')
+      +'</div>'+(A.image?'<div class="ab-img rv" style="--d:.15s"><img loading="lazy" src="'+B+A.image+'.png" alt=""></div>':'')+'</div>';
+    if(A.skills&&A.skills.length)h+=abSec('Skills','<div class="ab-2">'+A.skills.map(function(s,k){
+      return '<div class="ab-row rv" style="--d:'+((k%2)*.1+Math.floor(k/2)*.04)+'s"><span>'+esc(s)+'</span></div>';}).join('')+'</div>');
+    if(A.experience&&A.experience.length)h+=abSec('Experience',A.experience.map(function(e,k){
+      return '<div class="ab-row ab-3 rv" style="--d:'+(k*.05)+'s"><b>'+esc(e.name)+'</b><span>'+esc(e.role)+'</span><span>'+esc(e.period)+'</span></div>';}).join(''));
+    if(A.training&&A.training.length)h+=abSec('Training',A.training.map(function(a,k){
+      return '<div class="ab-row ab-3 rv" style="--d:'+(k*.05)+'s"><b class="wide">'+esc(a.name)+'</b><span>'+esc(a.period||a.count)+'</span></div>';}).join(''));   // 기간이 Experience의 3번째 칸과 같은 위치에 오게
+    h+='<div class="ab-foot rv">KIMRAYOON © 2026</div></div>';
+    if(aIO){aIO.stop();aIO=null;}
+    aBody.innerHTML=h;
     aEl.scrollTop=0;
+    aIO=rvBind(aEl,aBody);                                    // 스크롤하면 글씨와 줄선이 떠오르고, 올릴 때도 같은 효과
+    setHash('about');
     opener=document.activeElement;
     aEl.classList.add('open');aEl.setAttribute('aria-hidden','false');
     document.documentElement.style.overflow='hidden';
@@ -340,14 +554,14 @@ nav .about{text-transform:uppercase}
   addEventListener('keydown',function(e){if(e.key==='Escape')closeDetail();});
 
   var $=function(i){return document.getElementById(i)};
-  var vL=$('vL'),vR=$('vR'),gal=$('gallery'),ov=$('overlay'),info=$('info'),view=$('view'),foot=$('foot'),cur=$('cur');
+  var vL=$('vL'),vR=$('vR'),gal=$('gallery'),ov=$('overlay'),info=$('info'),view=$('view'),foot=$('foot');
   var clamp=function(v,a,b){return Math.min(b,Math.max(a,v))};
   var seg=function(p,a,b){return clamp((p-a)/(b-a),0,1)};
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
   /* ---- 원본(Framer 번들) 로직 이식 ---- */
   var o=vL, c=vR;                       // o: 첫 번째 파일, c: 두 번째 파일
-  var tx=innerWidth/2,ty=innerHeight/2,cx=tx,cy=ty,mx=null;
+  var tx=innerWidth/2,ty=innerHeight/2,mx=null;
   function show(v){
     o.style.visibility=v===o?'visible':'hidden';
     c.style.visibility=v===c?'visible':'hidden';
@@ -408,8 +622,6 @@ nav .about{text-transform:uppercase}
 
   /* 커스텀 커서 + 스크럽 루프 */
   (function loop(){
-    cx+=(tx-cx)*.35; cy+=(ty-cy)*.35;
-    cur.style.transform='translate('+cx+'px,'+cy+'px)';
     for(var k=0;k<cards.length;k++){                       // 사진 크기: 목표값을 향해 부드럽게 (위/아래 동일)
       var t0=tgt[k]||0,c0=cs[k]||0;
       c0=reduce?t0:c0+(t0-c0)*.22;
@@ -419,6 +631,48 @@ nav .about{text-transform:uppercase}
     scrub();
     requestAnimationFrame(loop);
   })();
+
+  /* ---- Showcase 구간 (여기를 수정하세요) ----
+     v1 = 1번(왼쪽 위), v3 = 3번(왼쪽 아래): videos/ 폴더의 영상
+     v2 = 2번·4번 공통 영상: 세로로 긴 영상 하나를 위 50%는 2번, 아래 50%는 4번 칸에 나눠서 보여줘요 */
+  var S={
+    title:'Product branding', title2:'Creative Direction',
+    sub:'HYDR LAB | Hydrogel Mask',
+    boxes:[
+      {title:'Concept',     text:'Skincare Product Branding'},
+      {title:'Production',    text:'AI Image, Visual Design, Animation'},
+      {title:'Tools', text:'Adobe Photoshop, After Effect, Chat GPT, Midjourney'}
+    ],
+    v1:'hydrlab_water.mp4', v2:'hydr-lab2.mp4', v3:'hydr-lab1.mp4'
+  };
+  var shEl=$('showcase'),shV1=$('sh1'),shV3=$('sh3'),shSrc=$('shSrc'),cT=$('shTop'),cB=$('shBot'),
+      gT=cT.getContext('2d'),gB=cB.getContext('2d'),shOn=false;
+  $('shLeft').innerHTML='<h2 class="sh-title">'+esc(S.title)+'<span>'+esc(S.title2)+'</span></h2>'
+    +'<p class="sh-sub">'+esc(S.sub)+'</p>'
+    +S.boxes.map(function(b){return '<div class="sh-box"><h4>'+esc(b.title)+'</h4><p>'+esc(b.text)+'</p></div>';}).join('');
+  shV1.src='videos/'+S.v1;shV3.src='videos/'+S.v3;shSrc.src='videos/'+S.v2;
+  [shV1,shV3,shSrc].forEach(function(v){v.muted=true;v.loop=true;v.playsInline=true;});
+  function shFit(cv){
+    var r=Math.min(devicePixelRatio||1,2),w=Math.round(cv.clientWidth*r),h=Math.round(cv.clientHeight*r);
+    if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}
+  }
+  function shDraw(cv,g,half){                       // half: 0=위 50%, 1=아래 50%
+    var vw=shSrc.videoWidth,vh=shSrc.videoHeight;
+    if(!vw||!vh||!cv.width||!cv.height)return;
+    var t=cv.width/(2*cv.height),sw,sh,sx,sy;       // 두 칸을 세로로 이은 비율에 맞춰 꽉 채움(cover)
+    if(vw/vh>t){sh=vh;sw=vh*t;sx=(vw-sw)/2;sy=0;}else{sw=vw;sh=vw/t;sx=0;sy=(vh-sh)/2;}
+    g.drawImage(shSrc,sx,sy+half*sh/2,sw,sh/2,0,0,cv.width,cv.height);
+  }
+  (function shLoop(){                                // 같은 영상 하나에서 위/아래를 같은 프레임으로 그려서 싱크가 정확해요
+    if(shOn&&shSrc.readyState>=2){shFit(cT);shFit(cB);shDraw(cT,gT,0);shDraw(cB,gB,1);}
+    requestAnimationFrame(shLoop);
+  })();
+  function shToggle(on){
+    if(on===shOn)return;shOn=on;
+    [shV1,shV3,shSrc].forEach(function(v){
+      if(on){var pr=v.play();if(pr&&pr.catch)pr.catch(function(){});}else v.pause();
+    });
+  }
 
   /* 스크롤 연출 */
   var ruler=document.createElement('div');
@@ -439,7 +693,10 @@ nav .about{text-transform:uppercase}
      (올릴 때는 이 순서의 반대로 같은 속도로 움직임) */
   var logoEl=document.querySelector('.logo'),capEl=document.querySelector('.caption');
   var heroEl=document.querySelector('.hero');
-  var HOLD=.10,T_END=.70,SHR0=.80,SHR1=.88;
+  /* 갤러리 다음에 Showcase 구간이 들어가서 타임라인이 늘어났어요 (spacer 8000 -> 10400)
+     SHR0~SHR1 : 사진 사라짐 / SH0~SH1 : Showcase 나타남 / SH1~SH2 : 유지 / SH2~SH3 : Showcase 사라짐 / 그 뒤 아웃트로 */
+  var HOLD=.075,T_END=.525,SHR0=.60,SHR1=.66;
+  var SH0=.66,SH1=.72,SH2=.84,SH3=.88;
   /* 사진은 크기 변동 없이 지나가다가, 화면에 보이는 부분이 EDGE(=20%) 이하로 줄어들면
      (= 80% 지나가면) 작아지며 사라짐. 위/아래 어느 쪽 가장자리든, 내릴 때든 올릴 때든 동일 */
   var EDGE=.2;
@@ -462,21 +719,35 @@ nav .about{text-transform:uppercase}
       tgt[k]=keep*shrink;
     });
 
+    // Showcase (영상 4칸 구간)
+    var shIn=seg(p,SH0,SH1),shOut=seg(p,SH2,SH3),shA=shIn*(1-shOut);
+    shEl.style.opacity=shA;
+    shEl.style.transform='translateY('+((1-shIn)*40-shOut*30)+'px)';
+    shToggle(shA>.01);
+
     // 아웃트로
     heroEl.style.opacity=p>T_END?0:1;                       // 갤러리에 완전히 덮인 뒤엔 영상을 숨겨서, 끝에서 흰 배경이 나오게
     ov.style.opacity=0;
-    gal.style.opacity=1-seg(p,SHR0+.02,SHR1+.02);           // 사진이 사라질 때쯤 검정 배경 여백도 서서히 투명해짐
+    gal.style.opacity=1-seg(p,SH2+.02,SH3+.02);             // Showcase가 사라질 때쯤 검정 배경이 서서히 투명해짐
     var intro=1-seg(p,SHR0,SHR1);
-    logoEl.style.opacity=intro;capEl.style.opacity=intro;   // 로고/소개 문구도 같이 사라짐
-    info.style.opacity=seg(p,SHR1,.95);                     // 검정 글씨(2026 등)가 나타남
-    view.style.transform='scale('+seg(p,.94,1)+')';
+    logoEl.style.opacity=intro;capEl.style.opacity=intro;   // 로고/소개 문구는 사진과 같이 사라짐
+    info.style.opacity=seg(p,.90,.94);                      // 검정 글씨(2026 등)가 나타남
+    view.style.transform='scale('+seg(p,.95,1)+')';
     view.style.pointerEvents=p>.97?'auto':'none';
     foot.style.opacity=seg(p,.96,1);
   }
   addEventListener('scroll',update,{passive:true});
   addEventListener('resize',update);
   addEventListener('load',update);
+
+  /* 새로고침하면 항상 맨 위에서 시작: 메인은 스크롤 0으로, 상세/About 창은 같은 창이 맨 위에서 다시 열려요 */
+  if('scrollRestoration' in history)history.scrollRestoration='manual';
+  scrollTo(0,0);
+  addEventListener('pageshow',function(e){if(e.persisted)scrollTo(0,0);});
   update();
+  var hh=/^#work-(\d+)$/.exec(location.hash);
+  if(hh&&P[+hh[1]])openDetail(+hh[1]);
+  else if(location.hash==='#about')openAbout();
 })();
 </script>
 </body>
